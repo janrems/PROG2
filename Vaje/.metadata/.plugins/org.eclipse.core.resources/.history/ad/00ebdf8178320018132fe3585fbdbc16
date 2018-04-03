@@ -1,0 +1,52 @@
+import java.awt.Dimension;
+import java.awt.Graphics;
+import javax.swing.JPanel;
+
+@SuppressWarnings("serial")
+public class Platno extends JPanel{
+	protected int sirina;
+	protected int visina;
+	protected Graf graf;
+	
+	
+	public Platno(int sirina, int visina) {
+		super();
+		this.sirina = sirina;
+		this.visina = visina;
+	}
+	
+	
+	public static int round (double x){
+		return (int)(x +0.5);
+	}
+	
+	
+	public void narisi(Graf g){
+		this.graf = g;
+	}
+	
+	public Dimension getPreferredSize(){
+		return new Dimension(visina, sirina);
+	}
+	
+	public void paintComponent(Graphics g){
+		for (Tocka t : graf.slovarTock.values()){
+			for (Tocka v : t.sosedi){
+				g.drawLine(round(t.x), round(t.y), round(v.x), round(v.y));
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}
+

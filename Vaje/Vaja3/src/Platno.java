@@ -1,0 +1,190 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.swing.JPanel;
+
+@SuppressWarnings("serial")
+public class Platno extends JPanel implements MouseListener, MouseMotionListener, KeyListener{
+	protected int sirina;
+	protected int visina;
+	protected Graf graf;
+	protected Set<Tocka> oznacene;
+	protected Tocka aktivna;
+	protected int aktX;
+	protected int aktY;
+	protected Color barvaTock;
+	protected Color barvaOznacene;
+	protected Color barvaPovezav;
+	protected Color barvaAktivna;
+	final int premer = 20;
+	
+	
+	public Platno(int sirina, int visina){
+		super();
+		this.sirina = sirina;
+		this.visina = visina;
+		this.barvaTock = Color.black;
+		this.barvaAktivna = Color.red;
+		this.barvaPovezav = Color.blue;
+		this.barvaOznacene = Color.yellow;
+		this.oznacene = new HashSet<Tocka>();
+		addMouseListener(this);
+		addMouseMotionListener(this);
+		addKeyListener(this);
+	}
+	
+	
+	public static int round (double x){
+		return (int)(x +0.5);
+	}
+	
+	
+	public void narisi(Graf g){
+		this.graf = g;
+		repaint();
+	}
+	
+	public Dimension getPreferredSize(){
+		return new Dimension(visina, sirina);
+	}
+	
+	public void paintComponent(Graphics g){
+		for (Tocka t : graf.slovarTock.values()){
+			for (Tocka v : t.sosedi){
+				g.drawLine(round(t.x), round(t.y), round(v.x), round(v.y));
+			}
+		}
+		int w = premer;
+		int h = premer;
+		for (Tocka a : graf.slovarTock.values()) {
+			if (aktivna == a){
+				g.setColor(barvaAktivna);
+			}else if (oznacene.contains(a)){
+				g.setColor(barvaOznacene);
+			}else{
+				g.setColor(barvaTock);
+			}
+			g.fillOval(round(a.x-w/2), round(a.y-h/2), w, h);
+		}
+	}
+
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		if (aktivna != null){
+			aktivna.x = e.getX();
+			aktivna.y = e.getY();
+			repaint();
+		}
+		
+	}
+
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		for (Tocka t: graf.slovarTock.values()){
+			if (Math.sqrt(Math.pow(e.getX()- round(t.x),2) + Math.pow(e.getY()- round(t.y),2)) <= premer/2){
+				aktivna = t;
+				aktX = round(t.x);
+				aktY = round(t.y);
+				break;
+			}
+		}
+		repaint();
+		
+	}
+
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		aktivna.x = e.getX();
+		aktivna.y = e.getY();
+		if (aktivna == null){
+			int steviloTock = graf.slovarTock.size();
+			Tocka nova = new Tocka(Integer.toString(steviloTock + 1));
+			nova.x = e.getX();
+			nova.y = e.getY();
+			graf.slovarTock.put(nova.ime, nova);
+		}else if ((aktivna.x == aktX)&&(aktivna.y == aktY)){
+				if (oznacene.contains(aktivna)){
+					oznacene.remove(aktivna);
+				}else{
+					oznacene.add(aktivna);
+				}
+				aktivna = null;
+		}else{
+			aktivna = null;
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}
+

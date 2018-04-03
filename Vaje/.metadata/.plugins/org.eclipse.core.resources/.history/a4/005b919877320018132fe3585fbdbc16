@@ -1,0 +1,17 @@
+import java.awt.HeadlessException;
+
+import javax.swing.JFrame;
+
+@SuppressWarnings("serial")
+public class Okno extends JFrame {
+	protected Platno platno;
+
+	public Okno(Platno platno, String title) throws HeadlessException {
+		super();
+		this.platno = platno;
+		this.setTitle(title);
+	}
+	
+	
+	
+}

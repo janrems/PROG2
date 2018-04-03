@@ -1,0 +1,15 @@
+
+public class Test {
+
+	public static void main(String[] args) {
+		Graf g = Graf.cikel(5);
+		g.razporedi(500, 500, 300);
+		Okno okno = new Okno();
+		okno.pack();
+		okno.setVisible(true);
+		okno.platno.narisi(g);
+
+
+	}
+
+}
